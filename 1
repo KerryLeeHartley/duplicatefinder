@@ -1,0 +1,48 @@
+function findDuplicates() {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var dataRange = sheet.getDataRange();
+    var data = dataRange.getValues();
+
+    // Define the column to check (1 for column A, 2 for column B, etc.)
+    var columnToCheck = 1; // Adjust this as needed
+
+    // Object to store the counts of each value
+    var valueCounts = {};
+
+    // Loop through the data
+    for (var i = 0; i < data.length; i++) {
+      var value = data[i][columnToCheck - 1];
+
+      // Log the current row and value
+      Logger.log('Row: ' + (i + 1) + ', Value: ' + value);
+
+      // Only consider non-empty values
+      if (value !== '') {
+        if (valueCounts[value]) {
+          valueCounts[value].push(i + 1); // Store the row number (1-based index)
+        } else {
+          valueCounts[value] = [i + 1];
+        }
+      }
+    }
+
+    // Clear previous highlights
+    dataRange.setBackground(null);
+
+    // Highlight duplicates
+    for (var value in valueCounts) {
+      if (valueCounts[value].length > 1) {
+        valueCounts[value].forEach(function(row) {
+          sheet.getRange(row, columnToCheck).setBackground('#FFCCCC'); // Highlight in light red
+        });
+      }
+    }
+
+    // Log completion
+    Logger.log('Duplicates highlighted successfully.');
+
+  } catch (error) {
+    Logger.log('Error: ' + error.toString());
+  }
+}
