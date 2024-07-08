@@ -1,0 +1,1 @@
+=IF(MONTH(A2) <= 3, "Q1", IF(MONTH(A2) <= 6, "Q2", IF(MONTH(A2) <= 9, "Q3", "Q4")))
